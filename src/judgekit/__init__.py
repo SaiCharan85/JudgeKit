@@ -20,6 +20,7 @@ from judgekit.llm import (
     TextReply,
     TextStructuredLLM,
 )
+from judgekit.panel import JudgePanel, PanelRule, item_fails, model_family
 from judgekit.rubric import (
     DEFAULT_FAIL_ON,
     Rubric,
@@ -40,9 +41,11 @@ __all__ = [
     "ChatMessage",
     "ItemResult",
     "Judge",
+    "JudgePanel",
     "JudgeResponse",
     "LLMCallError",
     "LLMJudge",
+    "PanelRule",
     "Rubric",
     "RubricError",
     "RubricItem",
@@ -55,7 +58,9 @@ __all__ = [
     "TextStructuredLLM",
     "Verdict",
     "__version__",
+    "item_fails",
     "load_rubric",
+    "model_family",
     "parse_rubric",
     "render_system",
     "score",

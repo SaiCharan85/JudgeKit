@@ -55,6 +55,7 @@ class Verdict(BaseModel):
     unexpected_ids: tuple[str, ...] = ()  # answers for ids the rubric does not have (ignored)
     error: str = ""  # set when the judge could not run; the verdict then fails
     calls: tuple[CallInfo, ...] = ()  # LLM calls behind this verdict (audit, cost)
+    members: tuple["Verdict", ...] = ()  # a panel's member verdicts (empty for one judge)
 
     @property
     def available(self) -> bool:
