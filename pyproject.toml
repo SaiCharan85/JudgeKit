@@ -1,6 +1,6 @@
 [project]
 name = "judgekit"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "Domain-agnostic LLM-as-judge toolkit: rubrics, judge runners, panels, planted-error evals, calibration and bias tests."
 readme = "README.md"
 license = { file = "LICENSE" }

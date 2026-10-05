@@ -13,6 +13,29 @@ uv sync
 uv run pytest
 ```
 
+## What's inside
+
+| Module | Purpose |
+|---|---|
+| `rubric` | YAML rubrics: yes = pass questions with `critical` / `major` / `minor` severity tiers |
+| `judge` | `Judge` protocol, `Verdict`, `score()` (code, not the model, decides pass/fail) |
+| `llm` | `StructuredLLM` / `TextLLM` protocols; `TextStructuredLLM` adds schema + retry |
+| `runner` | `LLMJudge`: rubric prompt (static, cache-friendly) + structured verdict |
+| `panel` | `JudgePanel`: any / majority / all votes, model-family diversity, early stopping |
+| `planted` | Plant known errors in correct samples; catch and false-alarm rates; resumable runs |
+| `mutators` | Generic text mutators: number swap, dropped / inserted sentence, phrase swap, negation |
+| `calibration` | Cohen's kappa vs human labels, clustered bootstrap CIs, paired judge comparison |
+| `bias` | Position, verbosity, politeness and repeat probes: flip rate and net shift |
+| `testing` | Scripted fake LLMs for tests (no network, no keys) |
+
+```python
+from judgekit import LLMJudge, load_rubric
+
+judge = LLMJudge(my_structured_llm, load_rubric(Path("rubrics/explanation.yaml")))
+verdict = judge.evaluate(case_text, avoid_families=frozenset({"family_that_wrote_it"}))
+verdict.passed, [f.item_id for f in verdict.failures]
+```
+
 Install from another project:
 
 ```bash

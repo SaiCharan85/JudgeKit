@@ -1,5 +1,32 @@
 """JudgeKit: domain-agnostic LLM-as-judge evaluation of reasoning."""
 
+from judgekit.bias import (
+    BiasCase,
+    BiasProbe,
+    BiasResult,
+    BiasStats,
+    estimate_bias_calls,
+    politeness_probe,
+    position_probe,
+    repeat_probe,
+    run_bias,
+    sectioned,
+    verbosity_probe,
+)
+from judgekit.calibration import (
+    Agreement,
+    Estimate,
+    HumanLabel,
+    ThresholdRow,
+    agreement,
+    bootstrap,
+    cohen_kappa,
+    compare,
+    kappa_ci,
+    suite_estimates,
+    verdicts_by_case,
+    vote_threshold_tradeoff,
+)
 from judgekit.judge import (
     Answer,
     ItemResult,
@@ -45,15 +72,22 @@ from judgekit.rubric import (
 )
 from judgekit.runner import LLMJudge, render_system
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
 
 __all__ = [
     "DEFAULT_FAIL_ON",
+    "Agreement",
     "Answer",
+    "BiasCase",
+    "BiasProbe",
+    "BiasResult",
+    "BiasStats",
     "CallInfo",
     "CaseResult",
     "ChatMessage",
     "ErrorType",
+    "Estimate",
+    "HumanLabel",
     "ItemResult",
     "Judge",
     "JudgePanel",
@@ -77,16 +111,32 @@ __all__ = [
     "TextLLM",
     "TextReply",
     "TextStructuredLLM",
+    "ThresholdRow",
     "TypeStats",
     "Verdict",
     "__version__",
+    "agreement",
+    "bootstrap",
+    "cohen_kappa",
+    "compare",
+    "estimate_bias_calls",
     "item_fails",
+    "kappa_ci",
     "load_rubric",
     "model_family",
     "parse_rubric",
     "plant",
+    "politeness_probe",
+    "position_probe",
     "render_system",
+    "repeat_probe",
+    "run_bias",
     "run_suite",
     "score",
+    "sectioned",
+    "suite_estimates",
     "unavailable",
+    "verbosity_probe",
+    "verdicts_by_case",
+    "vote_threshold_tradeoff",
 ]
