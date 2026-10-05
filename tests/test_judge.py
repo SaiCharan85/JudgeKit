@@ -1,24 +1,18 @@
 import pytest
 from pydantic import ValidationError
 
-from judgekit import Answer, Judge, JudgeResponse, Rubric, Severity, Verdict, parse_rubric, score
+from judgekit import (
+    Answer,
+    Judge,
+    JudgeResponse,
+    Rubric,
+    Severity,
+    Verdict,
+    parse_rubric,
+    score,
+    unavailable,
+)
 from judgekit.judge import NOTE_MAX
-
-
-@pytest.fixture
-def rubric() -> Rubric:
-    return parse_rubric(
-        {
-            "name": "r",
-            "version": "1",
-            "instructions": "x",
-            "items": [
-                {"id": "crit", "question": "c?", "severity": "critical"},
-                {"id": "maj", "question": "m?"},
-                {"id": "mino", "question": "n?", "severity": "minor"},
-            ],
-        }
-    )
 
 
 def _resp(**answers: str) -> JudgeResponse:
@@ -169,7 +163,7 @@ class _StubJudge:
     def judge_id(self) -> str:
         return "stub"
 
-    def evaluate(self, case: str) -> Verdict:
+    def evaluate(self, case: str, *, avoid_families: frozenset[str] = frozenset()) -> Verdict:
         answer = "no" if "invented" in case else "yes"
         return score(self.rubric, _resp(crit=answer, maj="yes", mino="yes"), self.judge_id)
 
@@ -183,3 +177,23 @@ def test_stub_satisfies_judge_protocol(rubric: Rubric) -> None:
 
 def test_non_judge_is_rejected_by_protocol_check() -> None:
     assert not isinstance(object(), Judge)
+
+
+# ---------------------------------------------------------------- unavailable verdicts
+
+
+def test_unavailable_verdict_fails_every_item(rubric: Rubric) -> None:
+    v = unavailable(rubric, "j", "timeout")
+    assert not v.passed and not v.available
+    assert v.error == "timeout"
+    assert all(not i.answered and i.note == "timeout" for i in v.items)
+
+
+def test_unavailable_with_blank_error_still_has_a_reason(rubric: Rubric) -> None:
+    v = unavailable(rubric, "j", "")
+    assert v.error == "judge unavailable" and not v.available
+    assert v.items[0].note == "judge unavailable"
+
+
+def test_scored_verdict_is_available(rubric: Rubric) -> None:
+    assert score(rubric, _resp(crit="yes", maj="yes", mino="yes")).available
